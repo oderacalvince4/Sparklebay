@@ -1,0 +1,18 @@
+{
+  "id": "sparkle-bay-staff",
+  "name": "Sparkle Bay Staff",
+  "short_name": "SB Staff",
+  "description": "Staff app: record washes and manage bookings.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#073D7F",
+  "icons": [
+    { "src": "../icons/staff-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "../icons/staff-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "../icons/staff-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "../icons/staff-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
