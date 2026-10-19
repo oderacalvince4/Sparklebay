@@ -1,39 +1,32 @@
-SPARKLE BAY - HOME-SCREEN APP (customer + staff)
-================================================
+SPARKLE BAY - TWO SEPARATE HOME-SCREEN APPS
+===========================================
 
-WHAT THIS IS
-A small website that wraps your Apps Script app, so it can be installed on a phone
-with the Sparkle Bay icon and name.
-  - Customers install the app at the main address.
-  - Staff install the app at the same address followed by /staff/
+  /client/   customer app   (ID: sparkle-bay-customer, name "Sparkle Bay")
+  /staff/    staff app      (ID: sparkle-bay-staff,    name "SB Staff")
 
-STEP 1 - Update Code.gs (one change, already made in the new Code.gs)
-  The new Code.gs lets your app be shown inside this wrapper. Paste it over the old one,
-  keep your own PIN, then Deploy > Manage deployments > pencil > New version > Deploy.
+Each has its own icon, ID, install scope and service worker, so neither can
+interfere with the other. Both show the same Sparkle Bay logo (the staff icon
+carries a small green STAFF tag). Both talk to the same Apps Script backend.
 
-STEP 2 - Web app address (ALREADY DONE)
-  config.js already contains your Apps Script web app address. Nothing to do here
-  unless you create a brand new deployment later.
+FIRST-TIME SETUP
+  1. Apps Script: paste the latest Code.gs, keep your PIN, then
+     Deploy > Manage deployments > pencil > New version > Deploy.
+  2. config.js already holds your Apps Script web app address.
+  3. Upload everything in this folder to your host (GitHub Pages or Netlify).
+  4. Customer address:  https://YOUR-SITE/YOUR-REPO/client/
+     Staff address:     https://YOUR-SITE/YOUR-REPO/staff/   (keep it private)
 
-STEP 3 - Put the folder online (free)
-  Netlify:  go to app.netlify.com/drop, drag this whole folder onto the page, sign up
-            when asked. You get an address like https://something.netlify.app
-  (GitHub Pages or Cloudflare Pages also work: upload these files, keep the folder layout.)
-  Netlify lets you rename the address under Site settings > Change site name,
-  e.g. sparklebay.netlify.app
+UPDATING AN OLD UPLOAD (you used the earlier single-folder version)
+  - Upload all files again; same names are replaced and the new client folder is added.
+  - Optional tidy-up: delete the old manifest.webmanifest in the main folder.
+  - On the phone: remove the old "Sparkle Bay" app AND any Chrome-badged shortcut,
+    then install again from the /client/ address.
 
-STEP 4 - Install on a phone
-  iPhone (use Safari):  open the address > Share button > Add to Home Screen > Add
-  Android (use Chrome): open the address > menu (3 dots) > Install app / Add to Home screen
-  Staff: do the same at  https://YOUR-ADDRESS/staff/
+INSTALLING
+  Android (Chrome): open the address. Tap Install in the blue bar at the top, or
+                    menu > Install app. Choose Install (not "Create shortcut").
+  iPhone (Safari):  Share > Add to Home Screen.
 
-IF THE APP DOES NOT SHOW (blank page)
-  Add ?direct=1 to the address to open the app without the wrapper, or tap
-  "Open directly" on the loading screen. Then check that Code.gs was deployed as a
-  NEW VERSION with the change from step 1.
-
-CHANGING THE ICON LATER
-  Replace the files in the icons folder (same names and sizes) and upload again.
-  Phones keep the old icon until the app is removed and installed again.
-
-KEEP THE STAFF ADDRESS PRIVATE. The staff app also needs your PIN.
+IF THE APP SHOWS A BLANK PAGE
+  Add ?direct=1 to the address, or tap "Open directly" on the loading screen, and
+  check that Code.gs was deployed as a NEW VERSION.

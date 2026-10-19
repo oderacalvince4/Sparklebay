@@ -16,6 +16,12 @@
 <style>
   html, body { margin:0; height:100%; background:#F1F1F1; font-family:system-ui,Arial,sans-serif; }
   iframe { position:fixed; inset:0; width:100%; height:100%; border:0; background:#F1F1F1; }
+  body.hasbar iframe { top:46px; height:calc(100% - 46px); }
+  #install { position:fixed; top:0; left:0; right:0; height:46px; z-index:3; background:#073D7F; color:#fff; display:flex; align-items:center; gap:10px; padding:0 10px 0 14px; font-size:14px; }
+  #install[hidden] { display:none; }
+  #install span { flex:1; line-height:1.2; }
+  #install button { border:0; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:700; cursor:pointer; background:#6491DE; color:#fff; }
+  #install #ix { background:transparent; font-size:22px; padding:4px 8px; }
   #splash { position:fixed; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; z-index:2; transition:opacity .3s; text-align:center; padding:24px; }
   #splash img { width:150px; height:150px; border-radius:28px; }
   #splash p { margin:16px 0 0; font-size:15px; opacity:.85; }
@@ -24,12 +30,30 @@
 </style>
 </head>
 <body>
+<div id="install" hidden><span id="itext"></span><button id="ibtn" type="button">Install</button><button id="ix" type="button" aria-label="Close">&times;</button></div>
 <div id="splash"><img src="../icons/staff-icon-192.png" alt="Sparkle Bay"><p id="msg">Loading...</p><p id="help">Taking long? <a id="direct" href="#">Open directly</a></p></div>
 <iframe id="app" title="Sparkle Bay Staff"></iframe>
 <script src="../config.js"></script>
 <script>
 (function () {
-  var MODE = 'staff';
+  var MODE = 'staff', WHO = 'staff', KEY = 'sb-dismiss-' + MODE;
+  var bar = document.getElementById('install'), itext = document.getElementById('itext'), ibtn = document.getElementById('ibtn'), deferred = null;
+  var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  function dismissed() { try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function showBar(text, canInstall) {
+    if (standalone || dismissed()) return;
+    itext.textContent = text; ibtn.style.display = canInstall ? '' : 'none';
+    bar.hidden = false; document.body.classList.add('hasbar');
+  }
+  function hideBar() { bar.hidden = true; document.body.classList.remove('hasbar'); }
+  if (!standalone) {
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; showBar('Install the ' + WHO + ' app on your phone', true); });
+    window.addEventListener('appinstalled', hideBar);
+    if (/iphone|ipad|ipod/i.test(navigator.userAgent)) showBar('To install: tap Share, then Add to Home Screen', false);
+  }
+  ibtn.onclick = function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.then(function () { deferred = null; hideBar(); }); };
+  document.getElementById('ix').onclick = function () { hideBar(); try { sessionStorage.setItem(KEY, '1'); } catch (e) {} };
+
   var base = (window.SPARKLE || {}).APP_URL || '';
   var splash = document.getElementById('splash'), msg = document.getElementById('msg');
   if (!/^https:\/\/script\.google\.com\//.test(base)) {
@@ -43,7 +67,7 @@
   frame.onload = function () { splash.style.opacity = 0; setTimeout(function () { splash.style.display = 'none'; }, 350); };
   setTimeout(function () { document.getElementById('help').style.display = 'block'; }, 9000);
   frame.src = url;
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(function () {});
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 })();
 </script>
 </body>
